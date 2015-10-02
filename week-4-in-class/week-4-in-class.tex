@@ -1,0 +1,29 @@
+\documentclass[11pt]{article}  % 11 points is a good size
+\usepackage{fullpage}
+
+\begin{document}
+\title{Week 4 In-Class}
+\author{
+    Benjamin Sorenson \\
+    \and
+    Ailin Deng \\
+    \and
+    Katherine Yang
+}
+
+\maketitle
+\section{Question 2}
+The liklihood of an element being selected as the pivot point is part of the
+analysis because how the array is partitioned affects the running time. If
+there is at least one element on the other side of the pivot, the running
+time is \(\Theta\left(n\lg n\right)\), but if one sub-array is empty, the
+running time is \(\Theta\left(n^2\right)\). So, in the analysis we need to
+consider the liklihood that \(p\) is either the largest or smallest element
+of \(A\). In an array of size \(n\), the liklihood of selecting element
+\(i\) is \(\frac{1}{n}\).
+
+\section{Question 4}
+If we left \(X_i\) be the event that person \(i\) received the correct hat, then
+\[ Pr\left\{X_i=1\right\} = \frac{1}{n}\]
+\[E\left(X\right)=\sum_{i=1}^{n}{\frac{1}{n}}=n\times\frac{1}{n}=1\]
+\end{document}
