@@ -1,0 +1,112 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\begin{document}
+\author{Benjamin Sorenson} \title{Assignment 2}
+\maketitle
+
+
+\section{2.3-7}
+
+We could use \texttt{MERGE-SORT} to sort \(S\)
+in \(\Theta(n\lg n)\)
+time, and then for each \(s \in S\)
+use \texttt{BINARY-SEARCH} to search for \(s-x\).
+\texttt{BINARY-SEARCH} is defined below, and on each call it divides
+the problem by two and makes a recursive call until, in the worst
+case, the length of the array is \( \le 2\)---so
+it's worst-case runtime is \( O( \lg n)\).
+The function \texttt{FIND-EXACT-SUM} implements the the described
+algorithm (I haven't quite got the hang of \LaTeX formatting so the algorithms appear on the next page).
+
+\begin{algorithm}
+  \begin{algorithmic}
+    \Function{binary-search}{$A, l, r, k$} \State
+    $mid \gets \lfloor \frac{l + r}{2} \rfloor$
+    \If{$A\left[mid\right] = k$} \State \Return $mid$ \EndIf
+    \If{$mid=l$}\If{$A\left[mid\right] > k$}\State \Return $mid$ \Else
+    \State \Return $mid + 1$\EndIf\EndIf \If{$A\left[mid\right] < k$}
+    \State \Return \Call{binary-search}{$A,l,mid,k$} \EndIf
+    \If{$A\left[mid\right] > k$} \State \Return
+    \Call{binary-search}{$A,mid+1,l,k$} \EndIf
+    \EndFunction
+  \end{algorithmic}
+  \begin{algorithmic}
+    \Function{find-exact-sum}{$S, x$}\State \Call{merge-sort}{$S$}
+    \For{$i \gets 1$ to $length \left[S\right]$} \State
+    $d \gets S\left[i\right]- x$ \State
+    $j \gets $\Call{binary-search}{$S, 1, length\left[S\right], d$}
+    \If{$S\left[j\right] = x$} \State \Return \texttt{True}\EndIf
+    \EndFor
+    \State \Return \texttt{False}
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+\section{6.3-3}
+The number of leaves in a tree of size \(n\)
+is \(\left\lceil \frac{n}{2}\right\rceil\).
+Without loss of generality, we will assume that \(n = 2^k\).
+The number of nodes one level up from the bottom (\(h=1\)),
+can be found by subtracting the number of leaves from the total number
+of elements and applying the same formula. This sets up the recurrence
+relation
+\[\left\lceil\frac{ x_n}{2}\right\rceil = \left\lceil\frac{x_{n-1} - \left\lceil \frac{x_{n-1}}{2}
+    \right\rceil}{2} \right\rceil\]
+with the initial condition \(x_0 = 2^k\), this becomes
+\[x_n = x_{n-1} - \frac{x_{n-1}}{2}\]
+Assume that for some \(x_r\), \[x_r \le \frac{2^k}{2^{r}}\] Then
+\[x_{r+1} = x_r - \frac{x_r}{2} \le
+\frac{2^k}{2^{r}} - \frac{\frac{2^k}{2^{r}}}{2}\]
+\[x_{r+1} \le \frac{2^k}{2^{(r+1)}} \]
+\section{6.5-8}
+The idea begin \texttt{HEAP-DELETE} is that we can use two
+\(\Theta (\lg n)\)
+procedures, \texttt{HEAP-INCREASE-KEY} and \texttt{HEAP-EXTRACT-MAX}
+to delete an element of the heap \(A\).
+First, increase the key to \(\max + 1\),
+and then use \texttt{HEAP-EXTRACT-MAX} to remove it.
+
+\begin{algorithm}
+  \begin{algorithmic}
+    \Procedure{heap-delete}{$A,i$} \State $max \gets$
+    \Call{heap-max}{$A$}\State \Call{heap-increase-key}{$A, i, max+1$}
+    \State \Call{heap-extract-max}{$A$}
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+\section{6.5-9}
+I couldn't quite figure this one out.  I know that we could perform
+\texttt{HEAP-EXTRACT-MIN} in \(\Theta(\lg n)\)
+time on each of the \(k\)
+sub-lists, but this wouldn't guarantee that we're getting the lowest
+values from all \(k\)
+sub-lists.  The best I could come up with was to find the \(\min\)
+of the \(\min\)s
+from each of the \(k\)
+sub-lists, extract it from its sub-list, and place it in the merged
+array, but that would be \(\Theta(nk\lg k)\)
+\section{7.2-1}
+\begin{description}
+\item[Upper Bound] Show \(T(n) \le c n^2\)
+  \begin{description}
+  \item[Assume] \(T(n-1) \le c (n-1)^2\)
+  \item[Then] \(T(n) \le c n^2 - 2 cn + c + c_1 n \le cn^2\)
+    for \(c_1 < 2c\) and \(n \ge 1\)
+  \end{description}
+\item[Lower Bound] show \(T(n) \ge c n^2\)
+  \begin{description}
+  \item[Assume] \(T(n-1) \ge c(n-1)^2\)
+  \item[Then] \(T(n) \ge cn^2 -2cn + c + c_1n \ge cn^2\)
+    for \(c_1 \ge 2c\) and \(n \ge 1\)
+  \end{description}
+\item[Base Case] \(n=1\), \(T(1) = c = c (1^2)\)
+\end{description}
+\section{7.3-1}
+We analyze the expected running time of a randomized algorithm because
+as \(n\)
+gets large the the probability of the worst-case running
+time approaches \(0\)
+so the expected running gives a more realistic asymptotic behavior.
+\end{document}
