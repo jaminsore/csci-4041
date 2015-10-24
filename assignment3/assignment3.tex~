@@ -1,0 +1,26 @@
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\begin{document}
+\author{Benjamin Sorenson} \title{Assignment 3}
+\maketitle
+
+\begin{enumerate}[label=\bfseries Question \arabic*:]
+\item
+\item
+  \begin{enumerate}
+  \item By using this algorithm we can gaurentee that we avoid the
+    worst case for \texttt{QUICKSORT}.  We can add a call to
+    \texttt{SELECT} to the pivot corresponding to the \(i^{th}\)
+    order statistic (the median for example) for the input array
+    \(A\).
+    Since \texttt{PARTITION} and \texttt{SELECT} runs in \(\Theta(n)\)
+    time this means that we never have to worry about the worst case
+    (\(\Theta(n^2)\),
+    and we don't increase in the asymptotic running time of
+    \texttt{PARTITION}.
+  \item This bound is preferred because it is a guarantee not a
+    probabilistic expectation.
+\end{document}

@@ -1,0 +1,152 @@
+\documentclass[11pt]{article}
+%\usepackage{fullpage}
+\usepackage{enumitem}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\begin{document}
+
+\author{Benjamin Sorenson} \title{Assignment 3}
+\maketitle
+
+\begin{enumerate}[label=\bfseries Question \arabic*:]
+\item There is no comparison sort whose running time is linear for at
+  least half of the \(n!\)
+  inputs. From the proof of theorem 8.1,
+  \(\lg\left(\frac{n!}{2}\right)\)
+  is still \(\Omega(n \lg n)\).
+  Similarly, \(\lg\left(\left(n-1\right)!\right)\)
+  is also still \(\Omega(n \lg n)\).
+\item
+  \begin{enumerate}
+  \item By using this algorithm we can gaurentee that we avoid the
+    worst case for \texttt{QUICKSORT}.  We can add a call to
+    \texttt{SELECT} to select the pivot corresponding to the
+    \(i^{th}\)
+    order statistic (the median for example) for the input array
+    \(A\),
+    avoiding the worst-case scenario for \texttt{QUICKSORT}---the case
+    when there are \(n-1\)
+    elements on one side of the pivot and \(0\)
+    on the other.  Since \texttt{PARTITION} and \texttt{SELECT} run in
+    \(\Theta(n)\)
+    time this means that we never have to worry about the worst case
+    (\(\O(n^2)\)),
+    and we don't increase in the asymptotic running time of
+    \texttt{PARTITION}.
+  \item This bound is preferred because it is a guarantee not a
+    probabilistic expectation.
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \item
+    \[ m\left[i,j\right] = \left\{\begin{array}{ll}0 & \mbox{if
+          $i = j$}; \\ \max\limits_{i \leq k < j}{\left\{m[i,k] +
+            m[k+1, j] + p_{i-1}p_kp_j\right\}} & \mbox{if
+          $i<j$}. \\ \end{array}\right. \]
+  \item
+    \begin{proof} For the sake of contradiction, assume that there is
+      some parenthesization of the first \(k\)
+      (\(A_i \dots A_k\))
+      and the last \(n-k\)
+      (\(A_{k+1} \dots A_n\))
+      arrays such that
+      \(m\left[1,n\right] = m\left[1,k\right] + m\left[k+1, n\right] +
+      p_0p_kp_n \)
+      is the maximum number of possible scalar operations, and there
+      exists some \(m[1, k]' > m[1, k]\)
+      then
+      \(m\left[1,n\right] < m\left[1,k\right]' + m\left[k+1, n\right]
+      + p_0p_kp_n \)
+      which contradicts the fact that \(m[1, n]\)
+      is the maximum number of scalar operations.  By the same
+      reasoning, a contradiction also arises if there exists an
+      \(m[k+1, n]' > m[k+1, n]\).\end{proof}
+  \end{enumerate}
+\item
+  \begin{algorithm}
+    \begin{algorithmic}
+      \Function{memoized-lcs-length}{$X, Y$} \State
+      $m \gets length\left[X\right]$ \State
+      $n \gets length\left[Y\right]$
+
+      \For{$i \gets 0$ \textbf{to} $m$} \For{$j \gets 0$ \textbf{to}
+        $n$} \State $c\left[i, j\right] \gets -\infty$
+      \EndFor
+      \EndFor
+      \State \Return \Call{lookup-lcs-length}{$X, Y, n, m$}
+      \EndFunction
+    \end{algorithmic}
+
+\begin{algorithmic}
+  \Function{lookup-lcs-length}{$X, Y, i, j$}
+  \If{$c\left[i,j\right] >- \infty$} \State\Return $c\left[i,j\right]$
+  \EndIf
+  \If{$i=0 \lor j=0$} \State$c\left[i,j\right] \gets 0$
+  \ElsIf{$X\left[i\right]=Y\left[j\right]$} \State
+  $c\left[i,j\right] \gets$
+  \Call{lookup-lcs-length}{$X, Y, i-1, j-1$}$+1$ \Else \State
+  $left \gets$ \Call{lookup-lcs-length}{$X, Y, i, j-1$} \State
+  $up \gets$ \Call{lookup-lcs-length}{$X, Y, i-1, j$} \State
+  $c\left[i, j\right] \gets \max{\left\{left, up\right\}}$
+  \EndIf
+  \State \Return $c\left[i,j\right]$
+  \EndFunction
+\end{algorithmic}
+
+\end{algorithm}
+
+\item
+  \begin{algorithm}
+    \begin{algorithmic}
+      \Procedure{print-lcs}{$c, X, i, j$} \If{$i=0 \lor j=0$} \State
+      \Return\EndIf
+      \If{$c\left[i-1, j\right] = c\left[i, j-1\right]=c\left[i-1,
+          j-1\right]$}
+      \State\Call{print-lcs}{$c, X, i-1, j-1$} \State print
+      $X\left[i\right]$
+      \ElsIf{$c\left[i-1,j\right] \geq c\left[i, j-1\right]$}\State
+      \Call{print-lcs}{$c, X, i-1, j$} \Else \State
+      \Call{print-lcs}{$c, X, i, j-1$}
+      \EndIf
+      \EndProcedure
+    \end{algorithmic}
+  \end{algorithm}
+\item
+  \begin{enumerate}
+  \item A brute force solution would be to iterate over every possible
+    combination of exchanges of currencies starting with \(c_1\)
+    and ending with \(c_n\)
+    of lengths \(1 \dots n-1\).
+    Since there are \(n-1\)
+    exchange rates in each sequence, the running time of this approach
+    is given by the equation \(\sum_{k=1}^{n-1}{\binom{n-1}{k}}\).
+    Letting \(m = n-1\),
+    this becomes
+    \(\sum_{k=1}^{m}{\binom{m}{k}}=\sum_{k=0}^{m}{\binom{m}{k}}
+    -1=2^m-1=2^{n-1}-1=\Theta\left( 2^n\right)\).
+    This approach doesn't take into account that each exchange must
+    happen in order (that is, \(c_i\)
+    must be exchanged with \(c_{i+1} \dots c_{n}\)),
+    but an approach that did would still be exponential.
+  \item
+    \[ P\left(i\right)=\left\{\begin{array}{ll} 1 & \mbox{if $i=1$};
+        \\ \max\limits_{1 \leq k <
+          i}{\left\{P\left(i-k\right)r_{i-k,i}\right\}} & \mbox{if
+          $i > 1$}. \\ \end{array} \right. \]
+  \item Suppose there was an optimal sequence of \(m\)
+    exchanges such \(P(n) = P(k)r_{kn} - \sum_{i=1}^{m}{C_i}\)
+    where \(C_i\)
+    is the commission charged at exchange \(i\)
+    yielded the maximum exchange rate. Consider \(P(k)' > P(k)\).
+    We cannot guarantee that substituting \(P(k)'\)
+    for \(P(k)\)
+    would result in a higher return since we don't know the commission
+    charged for \(P(k)'\).
+  \end{enumerate}
+                        \end{enumerate}
+x\end{document}
